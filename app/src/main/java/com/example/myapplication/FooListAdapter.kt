@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.sample.databinding.ItemFooBinding
 
 
@@ -37,6 +38,9 @@ class FooListAdapter(
             binding.apply {
                 tvName.text = item.name
                 tvPhone.text = item.phone
+                Glide.with(itemView)
+                    .load(item.imgUri)
+                    .into(ivPicture)
 
                 itemView.setOnClickListener {
                     onItemClick(item)
