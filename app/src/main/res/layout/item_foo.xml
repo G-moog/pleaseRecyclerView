@@ -17,6 +17,12 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <ImageView
+                android:id="@+id/ivPicture"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@mipmap/ic_launcher" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -30,12 +36,7 @@
                     app:cardElevation="0dp"
                     app:cardCornerRadius="15dp"
                     >
-                    <ImageView
-                        android:id="@+id/ivPicture"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@mipmap/ic_launcher"
-                        />
+
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
@@ -48,14 +49,14 @@
                     />
 
             </LinearLayout>
+
             <TextView
                 android:id="@+id/tvPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                tools:text="01012345678"
-                />
+                tools:text="01012345678" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
