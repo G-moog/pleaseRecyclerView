@@ -36,8 +36,8 @@ class FooListAdapter(
 
         fun bind(item: Foo) {
             binding.apply {
-                tvName.text = item.name
-                tvPhone.text = item.phone
+                tvImgUri.text = item.imgUriName
+                tvFolderName.text = item.imgFolderName
                 Glide.with(itemView)
                     .load(item.imgUri)
                     .into(ivPicture)

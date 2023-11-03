@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sample.R
@@ -28,8 +29,9 @@ class MainActivity : AppCompatActivity() {
     val folderNameList = mutableListOf<String>()
     val imageUriList = mutableListOf<Uri>()
     val selectedImgIndexList = mutableListOf<Uri>()
+    val selectedFolderList = mutableListOf<String>()
 
-
+    var isChecked :Boolean = false
 
 
     private fun findAllDeviceImage() {
@@ -62,6 +64,7 @@ class MainActivity : AppCompatActivity() {
             close()
 
         }
+
     }
 
 
@@ -103,16 +106,35 @@ class MainActivity : AppCompatActivity() {
                     var tempIndex = 0;
                     if(folderNameList.get(i) == selectedItem){
                         selectedImgIndexList.add(tempIndex, imageUriList.get(i));
+                        selectedFolderList.add(tempIndex, folderNameList.get(i))
                         tempIndex += 1;
                     }
 
                 }
 
-                fooListAdapter.addItems(Foo.createSamples(0, selectedImgIndexList))
+                fooListAdapter.addItems(Foo.createSamples(0, selectedImgIndexList, selectedFolderList))
 
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
+        changeChkBoxImage()
+
     }
+
+    fun changeChkBoxImage(){
+        val myChkBox : ImageView = findViewById(R.id.ivCheckBox)
+        myChkBox.setOnClickListener(){
+            if(isChecked){
+                isChecked = false
+                myChkBox.setImageDrawable(resources.getDrawable(R.drawable.unchecked, null))
+            }else{
+                isChecked = true
+                myChkBox.setImageDrawable(resources.getDrawable(R.drawable.checked, null))
+            }
+        }
+
+    }
+
 }
