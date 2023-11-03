@@ -41,7 +41,6 @@
                             android:layout_weight="0.5"
                             android:src="@drawable/unchecked"
                             android:clickable="true"
-                            android:onClick="changeImage"
                             />
 
                         <TextView

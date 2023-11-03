@@ -60,11 +60,8 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, folderName)
                 Log.d(TAG, imageUri.toString())
             }
-
             close()
-
         }
-
     }
 
 
@@ -72,14 +69,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         binding = DataBindingUtil.setContentView(/* activity = */ this, /* layoutId = */ R.layout.activity_main)
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
 
         findAllDeviceImage()
-
 
         // lateinit
         // fooAdapter = FooAdapter {}
@@ -109,32 +104,10 @@ class MainActivity : AppCompatActivity() {
                         selectedFolderList.add(tempIndex, folderNameList.get(i))
                         tempIndex += 1;
                     }
-
                 }
-
                 fooListAdapter.addItems(Foo.createSamples(0, selectedImgIndexList, selectedFolderList))
-
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-
-        changeChkBoxImage()
-
     }
-
-    fun changeChkBoxImage(){
-        val myChkBox : ImageView = findViewById(R.id.ivCheckBox)
-        myChkBox.setOnClickListener(){
-            if(isChecked){
-                isChecked = false
-                myChkBox.setImageDrawable(resources.getDrawable(R.drawable.unchecked, null))
-            }else{
-                isChecked = true
-                myChkBox.setImageDrawable(resources.getDrawable(R.drawable.checked, null))
-            }
-        }
-
-    }
-
 }
