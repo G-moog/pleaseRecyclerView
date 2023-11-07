@@ -1,12 +1,16 @@
 package com.example.myapplication
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.sample.R
 import com.example.sample.databinding.ItemFooBinding
+import android.content.ContentValues.TAG
 
 
 class FooListAdapter(
@@ -41,14 +45,24 @@ class FooListAdapter(
 
         fun bind(item: Foo) {
             binding.apply {
-                tvName.text = item.name
-                tvPhone.text = item.phone
+                tvImgUri.text = item.imgUriName
+                tvFolderName.text = item.imgFolderName
                 Glide.with(itemView)
                     .load(item.imgUri)
                     .into(ivPicture)
 
                 itemView.setOnClickListener {
                     onItemClick(item)
+
+                    if(item.isChecked){
+                        item.isChecked = false
+                        ivCheckBox.setImageDrawable(R.drawable.unchecked)
+                        Log.d(TAG, "클릭 테스트 : 언체크드로 바껴라바껴라 바껴라")
+                    }else{
+                        item.isChecked = true
+                        ivCheckBox.setImageDrawable(R.drawable.checked)
+                        Log.d(TAG, "클릭 테스트 : 체크드로 바껴라바껴라 바껴라")
+                    }
                 }
             }
         }
@@ -65,4 +79,8 @@ class FooListAdapter(
             }
         }
     }
+}
+
+private fun ImageView.setImageDrawable(unchecked: Int) {
+
 }

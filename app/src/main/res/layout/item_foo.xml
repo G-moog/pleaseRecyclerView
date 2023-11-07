@@ -25,38 +25,44 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="151dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:strokeColor="@color/white"
-                    app:cardElevation="0dp"
-                    app:cardCornerRadius="15dp"
-                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                </com.google.android.material.card.MaterialCardView>
+                        <ImageView
+                            android:id="@+id/ivCheckBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:src="@drawable/unchecked"
+                            android:clickable="true"
+                            />
 
-                <TextView
-                    android:id="@+id/tvName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_gravity="center"
-                    tools:text="김이름"
-                    />
+                        <TextView
+                            android:id="@+id/tvImgUri"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            tools:text="이미지 Uri"
+                            android:background="@android:color/holo_orange_light"/>
+
+                        <TextView
+                            android:id="@+id/tvFolderName"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            tools:text="폴더명"
+                            android:background="@android:color/holo_blue_light"/>
+                    </LinearLayout>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                tools:text="01012345678" />
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
