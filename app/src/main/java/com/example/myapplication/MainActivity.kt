@@ -99,6 +99,7 @@ class MainActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val selectedItem = spinnerList[position]
                 Log.d("응애응애", "뱉어내라 목록: $selectedItem")
+
                 for(i in 1 until folderNameList.size){
                     var tempIndex = 0;
                     if(folderNameList.get(i) == selectedItem){
@@ -107,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 }
-
+                fooListAdapter.clearAllItems()
                 fooListAdapter.addItems(Foo.createSamples(0, selectedImgIndexList))
 
             }

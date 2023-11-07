@@ -22,6 +22,11 @@ class FooListAdapter(
         holder.bind(getItem(position))
     }
 
+    fun clearAllItems() {
+        currentList.removeAll()
+        notifyDataSetChanged() // 데이터가 변경되었음을 알림
+    }
+
     fun addItems(newItems : List<Foo>) {
         // submitList 로 데이터를 넣는다
         // 데이터 순서 처리 같은 것은 알아서 다 해줌
