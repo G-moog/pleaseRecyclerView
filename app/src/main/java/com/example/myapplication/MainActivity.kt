@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
 import com.example.sample.databinding.ActivityMainBinding
 
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     val imageUriList = mutableListOf<Uri>()
     val selectedImgIndexList = mutableListOf<Uri>()
     val selectedFolderList = mutableListOf<String>()
+    var page = 0
 
     var isChecked :Boolean = false
 
@@ -63,6 +65,26 @@ class MainActivity : AppCompatActivity() {
             close()
         }
     }
+    fun RecyclerView.onScrollAction(
+        doSomething: () -> Unit,
+    ) {
+        this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val lastVisibleItemPosition =
+                    (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                val itemTotalCount = (recyclerView.adapter?.itemCount ?: 0) - 1
+
+                if (itemTotalCount > 0 &&
+                    lastVisibleItemPosition == itemTotalCount &&
+                    !recyclerView.canScrollVertically(1)
+                ) {
+                    doSomething()
+                }
+            }
+        })
+    }
+
 
 
 
@@ -80,9 +102,6 @@ class MainActivity : AppCompatActivity() {
         // fooAdapter = FooAdapter {}
         binding.recyclerView.adapter = fooListAdapter
 
-        /*fooAdapter.addItems(PickerItem.createSamples(0, "Camera", folderNameList, imageUriList))*/
-
-
         val spinnerList = folderNameList.distinct()
 
         binding.spinner.adapter = ArrayAdapter(
@@ -90,6 +109,7 @@ class MainActivity : AppCompatActivity() {
             android.R.layout.simple_spinner_item, // 기본
             spinnerList // items
         )
+
 
 
 
@@ -105,10 +125,25 @@ class MainActivity : AppCompatActivity() {
                         tempIndex += 1;
                     }
                 }
+                fooListAdapter.clearRecyclerView()
+                fooListAdapter.notifyDataSetChanged()
+                fooListAdapter.clearAllViewHolders(binding.recyclerView)
                 fooListAdapter.removeItems()
-                fooListAdapter.addItems(Foo.createSamples(0, selectedImgIndexList, selectedFolderList))
+
+
+                fooListAdapter.addItems(Foo.createSamples(page, selectedImgIndexList, selectedFolderList))
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
+        binding.recyclerView.onScrollAction {
+            page += 1
+            fooListAdapter.addItems(Foo.createSamples(page,selectedImgIndexList, selectedFolderList))
+        }
+
     }
 }
+
+
+
+

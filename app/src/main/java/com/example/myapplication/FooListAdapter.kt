@@ -11,11 +11,16 @@ import com.bumptech.glide.Glide
 import com.example.sample.R
 import com.example.sample.databinding.ItemFooBinding
 import android.content.ContentValues.TAG
+import android.net.Uri
+import android.view.View
+import android.view.View.OnLongClickListener
 
 
 class FooListAdapter(
     private val onItemClick: (Foo) -> Unit
 ) : ListAdapter<Foo, FooListAdapter.ViewHolder>(diffCallback) {
+
+    val dimList = mutableListOf<Uri>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemFooBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -26,10 +31,56 @@ class FooListAdapter(
         holder.bind(getItem(position))
     }
 
-    fun removeItems(newItems: List<Foo>) {
-        currentList.toMutableList().apply {
-            removeAll(newItems)
+
+
+    fun clearRecyclerView(){
+
+
+        notifyDataSetChanged()
+    }
+
+    // 모든 뷰홀더를 비우는 함수
+    fun clearAllViewHolders(recyclerView: RecyclerView) {
+        Log.d(TAG, "clearAllViewHolders: 이거 작동함?")
+
+        // 첫번째 비움 방법
+        currentList.toMutableList().clear() // 데이터셋을 비움
+        notifyDataSetChanged()
+        for (item in currentList) {
+            Log.d("MutableListContents", item.toString())
         }
+
+        // 두번째 비움 방법
+        currentList.toMutableList().apply {
+            removeAll(this)
+        }.let(::submitList)
+        notifyDataSetChanged()
+        for (item in currentList) {
+            Log.d("MutableListContents2", item.toString())
+        }
+
+        // 세번째 비움 방법
+        val emptyMutableList = mutableListOf<Foo>()
+        submitList(emptyMutableList)
+        notifyDataSetChanged()
+        for (item in currentList) {
+            Log.d("MutableListContents3", item.toString())
+        }
+
+        clearRecyclerView()
+
+
+
+        notifyDataSetChanged() // 변경된 데이터셋을 RecyclerView에 알림
+
+        // RecyclerView에 적용된 뷰홀더를 모두 제거
+        for (i in 0 until recyclerView.childCount) {
+            val viewHolder = recyclerView.getChildViewHolder(recyclerView.getChildAt(i))
+            if (viewHolder is ViewHolder) {
+                viewHolder.onViewRecycled() // 각 뷰홀더에서 onViewRecycled()를 호출하여 리소스 해제 등의 작업 수행
+            }
+        }
+        recyclerView.removeAllViews() // RecyclerView의 모든 뷰를 제거
     }
 
     fun addItems(newItems : List<Foo>) {
@@ -40,9 +91,25 @@ class FooListAdapter(
         }.let(::submitList)
     }
 
+    fun removeItems(){
+        try {
+            Log.d(TAG, "removeItems: 스피너 바뀌면서 내용 비웠어요~")
+            currentList.toMutableList().apply {
+                removeAt(0)
+            }.let ( ::submitList )
+        } catch (e: Exception) {
+            Log.d(TAG, "removeItems: 암것도 없어서 안지웠어용~")
+        }
+
+    }
+
+
+
     inner class ViewHolder(
         private val binding: ItemFooBinding
     ) : RecyclerView.ViewHolder(binding.root) {
+
+
 
         fun bind(item: Foo) {
             binding.apply {
@@ -52,22 +119,39 @@ class FooListAdapter(
                     .load(item.imgUri)
                     .into(ivPicture)
 
-                itemView.setOnClickListener {
-                    onItemClick(item)
-
+                ivCheckBox.setOnClickListener {
+                    Log.d(TAG, "bind: 클릭이벤트 오긴 하나?")
+                    onItemClick(item).run { Log.d(TAG, "bind: 클릭이벤트 오긴 하나?22222") }
+                    Log.d(TAG, "bind: 클릭이벤트 오긴 하나?22222")
                     if(item.isChecked){
                         item.isChecked = false
-                        ivCheckBox.setImageDrawable(R.drawable.unchecked)
+                        ivCheckBox.setImageResource(R.drawable.unchecked)
                         Log.d(TAG, "클릭 테스트 : 언체크드로 바껴라바껴라 바껴라")
+                        dimList.remove(item.imgUri)
+
+
                     }else{
                         item.isChecked = true
-                        ivCheckBox.setImageDrawable(R.drawable.checked)
+                        ivCheckBox.setImageResource(R.drawable.checked)
                         Log.d(TAG, "클릭 테스트 : 체크드로 바껴라바껴라 바껴라")
+
+                        dimList.add(item.imgUri)
+                        Log.d(TAG, "선택한 이미지 유알아ㅣ 출력 : " + item.imgUri)
                     }
                 }
             }
         }
+
+
+
+
+        // 뷰홀더를 비우는 함수
+        fun onViewRecycled() {
+            // 리소스 해제 또는 기타 작업 수행
+        }
+
     }
+
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<Foo>() {
@@ -81,6 +165,10 @@ class FooListAdapter(
         }
     }
 }
+
+
+
+
 
 private fun ImageView.setImageDrawable(unchecked: Int) {
 
