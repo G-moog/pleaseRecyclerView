@@ -9,8 +9,10 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
 import com.example.sample.databinding.ActivityMainBinding
 
@@ -25,11 +27,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val selectedImgAdapter by lazy {
+        SelectedImgAdapter {
+
+        }
+    }
+
     val folderNameList = mutableListOf<String>()
     val imageUriList = mutableListOf<Uri>()
     val selectedImgIndexList = mutableListOf<Uri>()
+    val selectedFolderList = mutableListOf<String>()
+    var page = 0
 
-
+    var isChecked :Boolean = false
 
 
     private fun findAllDeviceImage() {
@@ -58,32 +68,47 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, folderName)
                 Log.d(TAG, imageUri.toString())
             }
-
             close()
-
         }
     }
+    fun RecyclerView.onScrollAction(
+        doSomething: () -> Unit,
+    ) {
+        this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val lastVisibleItemPosition =
+                    (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                val itemTotalCount = (recyclerView.adapter?.itemCount ?: 0) - 1
+
+                if (itemTotalCount > 0 &&
+                    lastVisibleItemPosition == itemTotalCount &&
+                    !recyclerView.canScrollVertically(1)
+                ) {
+                    doSomething()
+                }
+            }
+        })
+    }
+
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         binding = DataBindingUtil.setContentView(/* activity = */ this, /* layoutId = */ R.layout.activity_main)
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
 
-        findAllDeviceImage()
 
+        findAllDeviceImage()
 
         // lateinit
         // fooAdapter = FooAdapter {}
         binding.recyclerView.adapter = fooListAdapter
-
-        /*fooAdapter.addItems(PickerItem.createSamples(0, "Camera", folderNameList, imageUriList))*/
-
+        binding.selectedImgRecyclerView.adapter = selectedImgAdapter
 
         val spinnerList = folderNameList.distinct()
 
@@ -103,16 +128,29 @@ class MainActivity : AppCompatActivity() {
                     var tempIndex = 0;
                     if(folderNameList.get(i) == selectedItem){
                         selectedImgIndexList.add(tempIndex, imageUriList.get(i));
+                        selectedFolderList.add(tempIndex, folderNameList.get(i))
                         tempIndex += 1;
                     }
-
                 }
+                fooListAdapter.clearRecyclerView()
+                fooListAdapter.notifyDataSetChanged()
+                fooListAdapter.clearAllViewHolders(binding.recyclerView)
+                fooListAdapter.removeItems()
 
-                fooListAdapter.addItems(Foo.createSamples(0, selectedImgIndexList))
 
+                fooListAdapter.addItems(Foo.createSamples(page, selectedImgIndexList, selectedFolderList))
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
+        binding.recyclerView.onScrollAction {
+            page += 1
+            fooListAdapter.addItems(Foo.createSamples(page,selectedImgIndexList, selectedFolderList))
+        }
+
     }
 }
+
+
+
+
