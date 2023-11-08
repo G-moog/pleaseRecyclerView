@@ -26,6 +26,14 @@ data class Foo(
             }
         }
 
+        fun createSamples2(imgUriList : MutableList<Uri>) = mutableListOf<Foo>().apply {
+            for (i in 0 until imgUriList.size) {
+                add(Foo(i+1, "1", "1", imgUriList.get(i), false))
+/*                Log.d(TAG, "createSamples 할 때 뷰홀더에 찍은 이미지 Uri: " + imgUriList.get(page + i))
+                Log.d(TAG, "createSamples 할 때 뷰홀더에 찍은 이미지 폴더명: " + folderNameList.get(page + i))*/
+            }
+        }
+
         fun createEmpty() = mutableListOf<Foo>()
     }
 }

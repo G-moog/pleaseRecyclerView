@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
@@ -22,10 +23,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
 
     private val fooListAdapter by lazy {
-        FooListAdapter {
-
-        }
+        FooListAdapter(3){foo: Foo -> actionOnClick(foo)}
     }
+
 
     private val selectedImgAdapter by lazy {
         SelectedImgAdapter {
@@ -33,10 +33,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun actionOnClick(foo: Foo){
+        Log.d(TAG, "actionOnClick: 여기서 클릭이벤트시 할 액션을 만든다.")
+        selectedImgAdapter.addItems(SelectedImg(foo.id, foo.imgUri))
+
+    }
+
+
+
+
     val folderNameList = mutableListOf<String>()
     val imageUriList = mutableListOf<Uri>()
     val selectedImgIndexList = mutableListOf<Uri>()
     val selectedFolderList = mutableListOf<String>()
+    val dimList = mutableListOf<Uri>()
     var page = 0
 
     var isChecked :Boolean = false
@@ -99,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(/* activity = */ this, /* layoutId = */ R.layout.activity_main)
 
-        val layoutManager = LinearLayoutManager(this)
+        val layoutManager = GridLayoutManager(this, 3)
         binding.recyclerView.layoutManager = layoutManager
 
 

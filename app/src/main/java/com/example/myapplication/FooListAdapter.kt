@@ -14,17 +14,28 @@ import android.content.ContentValues.TAG
 import android.net.Uri
 import android.view.View
 import android.view.View.OnLongClickListener
+import com.example.sample.databinding.ItemSelectedimgBinding
 
 
 class FooListAdapter(
+    private val a: Int,
     private val onItemClick: (Foo) -> Unit
 ) : ListAdapter<Foo, FooListAdapter.ViewHolder>(diffCallback) {
 
     val dimList = mutableListOf<Uri>()
 
+
+
+    private val selectedImgAdapter by lazy {
+        SelectedImgAdapter {
+
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemFooBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+        val binding2 = ItemSelectedimgBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding, binding2)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -106,22 +117,28 @@ class FooListAdapter(
 
 
     inner class ViewHolder(
-        private val binding: ItemFooBinding
+        private val binding: ItemFooBinding,
+        private val binding2: ItemSelectedimgBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-
-
         fun bind(item: Foo) {
+            binding2.apply {
+                Glide.with(itemView)
+                    .load(item.imgUri)
+                    .into(ivSelectedPicture)
+            }
+
             binding.apply {
                 tvImgUri.text = item.imgUriName
-                tvFolderName.text = item.imgFolderName
+                /*tvFolderName.text = item.imgFolderName*/
+                tvFolderName.text = a.toString()
                 Glide.with(itemView)
                     .load(item.imgUri)
                     .into(ivPicture)
 
                 ivCheckBox.setOnClickListener {
                     Log.d(TAG, "bind: 클릭이벤트 오긴 하나?")
-                    onItemClick(item).run { Log.d(TAG, "bind: 클릭이벤트 오긴 하나?22222") }
+                    onItemClick(item)
                     Log.d(TAG, "bind: 클릭이벤트 오긴 하나?22222")
                     if(item.isChecked){
                         item.isChecked = false
@@ -137,6 +154,7 @@ class FooListAdapter(
 
                         dimList.add(item.imgUri)
                         Log.d(TAG, "선택한 이미지 유알아ㅣ 출력 : " + item.imgUri)
+                        /*selectedImgAdapter.addItems(SelectedImg.createSamples(dimList))*/
                     }
                 }
             }
