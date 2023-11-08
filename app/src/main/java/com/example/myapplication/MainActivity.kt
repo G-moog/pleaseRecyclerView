@@ -27,6 +27,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val selectedImgAdapter by lazy {
+        SelectedImgAdapter {
+
+        }
+    }
+
     val folderNameList = mutableListOf<String>()
     val imageUriList = mutableListOf<Uri>()
     val selectedImgIndexList = mutableListOf<Uri>()
@@ -96,11 +102,13 @@ class MainActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
 
+
         findAllDeviceImage()
 
         // lateinit
         // fooAdapter = FooAdapter {}
         binding.recyclerView.adapter = fooListAdapter
+        binding.selectedImgRecyclerView.adapter = selectedImgAdapter
 
         val spinnerList = folderNameList.distinct()
 
@@ -109,7 +117,6 @@ class MainActivity : AppCompatActivity() {
             android.R.layout.simple_spinner_item, // 기본
             spinnerList // items
         )
-
 
 
 
