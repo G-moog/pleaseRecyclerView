@@ -26,6 +26,12 @@ class FooListAdapter(
         holder.bind(getItem(position))
     }
 
+    fun removeItems(newItems: List<Foo>) {
+        currentList.toMutableList().apply {
+            removeAll(newItems)
+        }
+    }
+
     fun addItems(newItems : List<Foo>) {
         // submitList 로 데이터를 넣는다
         // 데이터 순서 처리 같은 것은 알아서 다 해줌

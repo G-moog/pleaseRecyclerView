@@ -105,6 +105,7 @@ class MainActivity : AppCompatActivity() {
                         tempIndex += 1;
                     }
                 }
+                fooListAdapter.removeItems()
                 fooListAdapter.addItems(Foo.createSamples(0, selectedImgIndexList, selectedFolderList))
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
