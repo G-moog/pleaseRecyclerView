@@ -39,62 +39,22 @@ class PickerAdapter(
 
 
 
-    fun clearRecyclerView(){
-
-
-        notifyDataSetChanged()
-    }
 
     // 모든 뷰홀더를 비우는 함수
     fun clearAllViewHolders(recyclerView: RecyclerView) {
-        Log.d(ContentValues.TAG, "clearAllViewHolders: 이거 작동함?")
-
-        // 첫번째 비움 방법
-        currentList.toMutableList().clear() // 데이터셋을 비움
-        notifyDataSetChanged()
-        for (item in currentList) {
-            Log.d("MutableListContents", item.toString())
-        }
-
-        // 두번째 비움 방법
-        currentList.toMutableList().apply {
-            removeAll(this)
-        }.let(::submitList)
-        notifyDataSetChanged()
-        for (item in currentList) {
-            Log.d("MutableListContents2", item.toString())
-        }
 
         // 세번째 비움 방법
         val emptyMutableList = mutableListOf<PickerItem>()
         submitList(emptyMutableList)
-        notifyDataSetChanged()
-        for (item in currentList) {
-            Log.d("MutableListContents3", item.toString())
-        }
+        //
 
-        clearRecyclerView()
-
-
-
-        notifyDataSetChanged() // 변경된 데이터셋을 RecyclerView에 알림
-
-        // RecyclerView에 적용된 뷰홀더를 모두 제거
-        for (i in 0 until recyclerView.childCount) {
-            val viewHolder = recyclerView.getChildViewHolder(recyclerView.getChildAt(i))
-            if (viewHolder is ViewHolder) {
-                viewHolder.onViewRecycled() // 각 뷰홀더에서 onViewRecycled()를 호출하여 리소스 해제 등의 작업 수행
-            }
-        }
-        recyclerView.removeAllViews() // RecyclerView의 모든 뷰를 제거
     }
 
     fun addItems(newItems : List<PickerItem>) {
+        submitList(newItems)
+
         // submitList 로 데이터를 넣는다
         // 데이터 순서 처리 같은 것은 알아서 다 해줌
-        currentList.toMutableList().apply {
-            addAll(newItems)
-        }.let(::submitList)
     }
 
     fun removeItems(){
@@ -117,9 +77,9 @@ class PickerAdapter(
 
         fun bind(item: PickerItem) {
             binding.apply {
-                tvImgUri.text = item.imgUriName
-                /*tvFolderName.text = item.imgFolderName*/
-                tvFolderName.text = a.toString()
+/*                tvImgUri.text = item.imgUriName
+                *//*tvFolderName.text = item.imgFolderName*//*
+                tvFolderName.text = a.toString()*/
                 Glide.with(itemView)
                     .load(item.imgUri)
                     .into(ivPicture)
@@ -162,7 +122,7 @@ class PickerAdapter(
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<PickerItem>() {
             override fun areItemsTheSame(oldItem: PickerItem, newItem: PickerItem): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.imgUri == newItem.imgUri
             }
 
             override fun areContentsTheSame(oldItem: PickerItem, newItem: PickerItem): Boolean {

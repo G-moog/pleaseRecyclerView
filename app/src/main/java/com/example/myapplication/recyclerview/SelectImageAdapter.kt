@@ -50,7 +50,7 @@ class SelectImageAdapter(
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<SelectImage>() {
             override fun areItemsTheSame(oldItem: SelectImage, newItem: SelectImage): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.imgUri == newItem.imgUri
             }
 
             override fun areContentsTheSame(oldItem: SelectImage, newItem: SelectImage): Boolean {

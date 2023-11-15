@@ -34,21 +34,18 @@ class PickerActivity : AppCompatActivity() {
 
     private fun actionOnClick(pickerItem: PickerItem){
         Log.d(ContentValues.TAG, "actionOnClick: 여기서 클릭이벤트시 할 액션을 만든다.")
-        selectImageAdapter.addItems(SelectImage(pickerItem.id, pickerItem.imgUri))
+        selectImageAdapter.addItems(SelectImage(pickerItem.imgUri))
 
     }
 
 
 
 
-    val folderNameList = mutableListOf<String>()
-    val imageUriList = mutableListOf<Uri>()
-    val selectedImgIndexList = mutableListOf<Uri>()
-    val selectedFolderList = mutableListOf<String>()
-    val dimList = mutableListOf<Uri>()
-    var page = 0
+    private val folderNameList = mutableListOf<String>()
+    private var page = 0
+    private var isChecked :Boolean = false
 
-    var isChecked :Boolean = false
+    private val pickerItemList = mutableListOf<PickerItem>()
 
 
     private fun findAllDeviceImage() {
@@ -73,7 +70,11 @@ class PickerActivity : AppCompatActivity() {
                 val imageUri = Uri.withAppendedPath(externalUri, "" + getLong(columnIndexID))
 
                 folderNameList.add(folderName)
-                imageUriList.add(imageUri)
+
+
+                pickerItemList.add(PickerItem(folderName, imageUri))
+
+                // 얘네로 PickerItem List를 생성
                 Log.d(ContentValues.TAG, folderName)
                 Log.d(ContentValues.TAG, imageUri.toString())
             }
@@ -135,29 +136,25 @@ class PickerActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val selectedItem = spinnerList[position]
                 Log.d("응애응애", "뱉어내라 목록: $selectedItem")
-                for(i in 1 until folderNameList.size){
-                    var tempIndex = 0;
-                    if(folderNameList.get(i) == selectedItem){
-                        selectedImgIndexList.add(tempIndex, imageUriList.get(i));
-                        selectedFolderList.add(tempIndex, folderNameList.get(i))
-                        tempIndex += 1;
+
+                // 뷰홀더 비우는거
+                //pickerAdapter.clearAllViewHolders(binding.recyclerView)
+                //
+
+                // 선택한 폴더의 아이템 추가
+                pickerAdapter.addItems(
+                    pickerItemList.filter {
+                        it.imgFolderName == selectedItem
                     }
-                }
-                pickerAdapter.clearRecyclerView()
-                pickerAdapter.notifyDataSetChanged()
-                pickerAdapter.clearAllViewHolders(binding.recyclerView)
-                pickerAdapter.removeItems()
-
-
-                pickerAdapter.addItems(PickerItem.createSamples(page, selectedImgIndexList, selectedFolderList))
+                )
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        binding.recyclerView.onScrollAction {
+/*        binding.recyclerView.onScrollAction {
             page += 1
             pickerAdapter.addItems(PickerItem.createSamples(page,selectedImgIndexList, selectedFolderList))
-        }
+        }*/
 
     }
 }
