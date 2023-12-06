@@ -105,6 +105,8 @@ class PickerAdapter(
                         /*selectedImgAdapter.addItems(SelectedImg.createSamples(dimList))*/
                     }
                 }
+
+
             }
         }
 
