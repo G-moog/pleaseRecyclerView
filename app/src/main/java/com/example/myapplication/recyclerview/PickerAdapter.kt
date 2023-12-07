@@ -84,24 +84,18 @@ class PickerAdapter(
                     .load(item.imgUri)
                     .into(ivPicture)
 
-                ivCheckBox.setOnClickListener {
+                linLaout.setOnClickListener {
+
                     Log.d(ContentValues.TAG, "bind: 클릭이벤트 오긴 하나?")
                     onItemClick(item)
                     Log.d(ContentValues.TAG, "bind: 클릭이벤트 오긴 하나?22222")
+
                     if(item.isChecked){
                         item.isChecked = false
-                        ivCheckBox.setImageResource(R.drawable.unchecked)
-                        Log.d(ContentValues.TAG, "클릭 테스트 : 언체크드로 바껴라바껴라 바껴라")
-                        dimList.remove(item.imgUri)
-
-
+                        /*dimList.remove(item.imgUri)*/
                     }else{
                         item.isChecked = true
-                        ivCheckBox.setImageResource(R.drawable.checked)
-                        Log.d(ContentValues.TAG, "클릭 테스트 : 체크드로 바껴라바껴라 바껴라")
-
-                        dimList.add(item.imgUri)
-                        Log.d(ContentValues.TAG, "선택한 이미지 유알아ㅣ 출력 : " + item.imgUri)
+                        /*dimList.add(item.imgUri)*/
                         /*selectedImgAdapter.addItems(SelectedImg.createSamples(dimList))*/
                     }
                 }

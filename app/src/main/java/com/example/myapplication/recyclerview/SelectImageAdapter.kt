@@ -30,7 +30,14 @@ class SelectImageAdapter(
         // 데이터 순서 처리 같은 것은 알아서 다 해줌
         currentList.toMutableList().apply {
             add(newItem)
-        }.let(::submitList)
+        }.distinct().let(::submitList)
+    }
+
+    fun addItems2(newItems : List<SelectImage>) {
+        submitList(newItems)
+
+        // submitList 로 데이터를 넣는다
+        // 데이터 순서 처리 같은 것은 알아서 다 해줌
     }
 
     inner class ViewHolder(

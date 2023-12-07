@@ -1,6 +1,7 @@
 package com.example.myapplication.recyclerview
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -32,21 +33,40 @@ class PickerActivity : AppCompatActivity() {
         }
     }
 
+    private val selectImageList = mutableListOf<SelectImage>()
+
+        //선택한 아이템 상단에 보이게 하기
     private fun actionOnClick(pickerItem: PickerItem){
-        Log.d(ContentValues.TAG, "actionOnClick: 여기서 클릭이벤트시 할 액션을 만든다.")
-        selectImageAdapter.addItems(SelectImage(pickerItem.imgUri))
+        if(selectImageAdapter.currentList.contains(SelectImage(pickerItem.imgUri))){
+
+            Log.d(TAG, "actionOnClick: 해제!!")
+
+            selectImageList.remove(SelectImage(pickerItem.imgUri))
+            val submitSelectImageList = selectImageAdapter.currentList.toMutableList().apply {
+                remove(SelectImage(pickerItem.imgUri))
+            }.distinct()
+            selectImageAdapter.addItems2(submitSelectImageList)
+        }else if(!selectImageAdapter.currentList.contains(SelectImage(pickerItem.imgUri))){
+
+            Log.d(TAG, "actionOnClick: 선택!!")
+
+            selectImageList.add(SelectImage(pickerItem.imgUri))
+            val submitSelectImageList = selectImageAdapter.currentList.toMutableList().apply {
+                add(SelectImage(pickerItem.imgUri))
+            }.distinct()
+            selectImageAdapter.addItems2(submitSelectImageList)
+
+            /*selectImageAdapter.addItems(SelectImage(pickerItem.imgUri))*/
+        }
+        
+
 
     }
 
-
-
-
     private val folderNameList = mutableListOf<String>()
     private var page = 0
-    private var isChecked :Boolean = false
 
     private val pickerItemList = mutableListOf<PickerItem>()
-
 
     private fun findAllDeviceImage() {
         val externalUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -70,8 +90,6 @@ class PickerActivity : AppCompatActivity() {
                 val imageUri = Uri.withAppendedPath(externalUri, "" + getLong(columnIndexID))
 
                 folderNameList.add(folderName)
-
-
                 pickerItemList.add(PickerItem(folderName, imageUri))
 
                 // 얘네로 PickerItem List를 생성
@@ -114,11 +132,8 @@ class PickerActivity : AppCompatActivity() {
         val layoutManager = GridLayoutManager(this, 3)
         binding.recyclerView.layoutManager = layoutManager
 
-
         findAllDeviceImage()
 
-        // lateinit
-        // fooAdapter = FooAdapter {}
         binding.recyclerView.adapter = pickerAdapter
         binding.selectedImgRecyclerView.adapter = selectImageAdapter
 
@@ -137,10 +152,6 @@ class PickerActivity : AppCompatActivity() {
                 val selectedItem = spinnerList[position]
                 Log.d("응애응애", "뱉어내라 목록: $selectedItem")
 
-                // 뷰홀더 비우는거
-                //pickerAdapter.clearAllViewHolders(binding.recyclerView)
-                //
-
                 // 선택한 폴더의 아이템 추가
                 pickerAdapter.addItems(
                     pickerItemList.filter {
@@ -150,11 +161,5 @@ class PickerActivity : AppCompatActivity() {
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-
-/*        binding.recyclerView.onScrollAction {
-            page += 1
-            pickerAdapter.addItems(PickerItem.createSamples(page,selectedImgIndexList, selectedFolderList))
-        }*/
-
     }
 }
