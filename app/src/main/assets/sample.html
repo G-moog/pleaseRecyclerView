@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+</head>
+<body>
+<h1>웹뷰</h1>
+<input type="text" id="message">
+<input type="button" value="토스트 메세지" onClick="showToast()"/>
+<script type="text/javascript">
+    function showToast() {
+        const message = document.getElementById('message')
+				// 브릿지이름.함수명
+        BridgeName.showToast(message.value)
+        message.value = ''
+    }
+
+    function updateMessage(sampleMessage) {
+        document.getElementById('message').value = sampleMessage
+        return true
+    }
+</script>
+</body>
+</html>

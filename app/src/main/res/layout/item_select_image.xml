@@ -9,9 +9,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginVertical="10dp"
-        app:cardCornerRadius="20dp"
-        app:strokeColor="#FC7100"
-        >
+        app:cardCornerRadius="20dp">
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,18 +19,21 @@
             >
 
             <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:src="@drawable/checked"
-                android:layout_gravity="right"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"/>
-
-            <ImageView
                 android:id="@+id/ivSelectedPicture"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_launcher_foreground" />
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/black"
+                android:text="7"
+                android:textColor="#FF00F2"
+                android:textSize="20dp"
+                android:id="@+id/selectedNumber"/>
 
         </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
