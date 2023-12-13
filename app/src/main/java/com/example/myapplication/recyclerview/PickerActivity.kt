@@ -76,21 +76,47 @@ class PickerActivity : AppCompatActivity() {
             }.distinct()
             selectImageAdapter.addItems2(submitSelectImageList)
 
-            val iterator = pickerAdapter.currentList.iterator()
-            var addedIndex : Int = 0
+            /*
+            === 로직 ===
+            목표. 선택한 PickerRecylerView의 Item의 'isChecked' 속성을 true로 변경하고, 'selectedNumber' 속성을
+                  해당 Item의 imgUri를 가진 SelectImageRecyclerView의 Item의 index+1 의 값으로 변경해야 한다.
+
+                  1. 선택한 PickerRecylerView의 Item의 imgUri 값을 가지는 SelectImage가 가지는 index 값을 구한다.
+
+            */
+
+            val selectImageIterator = selectImageAdapter.currentList.iterator()
+            var addedSelectImageIndex : Int = 0
             // iterator를 사용하여 리스트의 모든 요소 순환
-            while (iterator.hasNext()) {
-                val element = iterator.next()
+/*            while (selectImageIterator.hasNext()) {
+                Log.d(TAG, "actionOnClick: 와일문 진입")
+                val element = selectImageIterator.next()
+                Log.d(TAG, "element.imgUri: ${element.imgUri}")
+                Log.d(TAG, "pickerItem.imgUri: ${pickerItem.imgUri}")
                 if(element.imgUri == pickerItem.imgUri){
-                    addedIndex = pickerAdapter.currentList.indexOf(element)
-                    break
+
+                    Log.d(TAG, "actionOnClick: 일치하는거 찾음")
+                    addedSelectImageIndex = selectImageAdapter.currentList.indexOf(element)
+
+                }
+            }*/
+
+            for (item in selectImageAdapter.currentList) {
+                Log.d(TAG, "item.imgUri: ${item.imgUri}")
+                Log.d(TAG, "pickerItem.imgUri: ${pickerItem.imgUri}")
+                if(item.imgUri == pickerItem.imgUri){
+
+
+                    Log.d(TAG, "actionOnClick: 일치하는거 찾음")
+                    addedSelectImageIndex = selectImageAdapter.currentList.indexOf(item)
+
                 }
             }
-
-            var aa = selectImageAdapter.currentList.indexOf(SelectImage(pickerItem.imgUri))
-            Log.d(TAG, "actionOnClick: $aa")
+            Log.d(TAG, "actionOnClick: 와일문 탈출")
+            Log.d(TAG, "addedIndex: $addedSelectImageIndex")
             val addedPickerList = pickerAdapter.currentList.toMutableList()
-            addedPickerList[addedIndex] = PickerItem(addedPickerList[addedIndex].imgFolderName, addedPickerList[addedIndex].imgUri, true, aa+1)
+            var changedPicerImageIndex = pickerAdapter.currentList.indexOf(pickerItem)
+            addedPickerList[changedPicerImageIndex] = PickerItem(pickerItem.imgFolderName, pickerItem.imgUri, true, addedSelectImageIndex+1)
             pickerAdapter.addItems(addedPickerList)
         }
         
