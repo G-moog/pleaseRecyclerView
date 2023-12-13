@@ -7,7 +7,8 @@ import android.util.Log
 data class PickerItem(
     val imgFolderName: String,
     val imgUri : Uri,
-    var isChecked : Boolean = false
+    var isChecked : Boolean = false,
+    var selectedNumber : Number
 ) {
     // 더미
     companion object {

@@ -37,6 +37,7 @@ class PickerActivity : AppCompatActivity() {
 
         //선택한 아이템 상단에 보이게 하기
     private fun actionOnClick(pickerItem: PickerItem){
+            Log.d(TAG, "actionOnClick: 클릭이벤트는?")
         if(selectImageAdapter.currentList.contains(SelectImage(pickerItem.imgUri))){
 
             Log.d(TAG, "actionOnClick: 해제!!")
@@ -46,6 +47,25 @@ class PickerActivity : AppCompatActivity() {
                 remove(SelectImage(pickerItem.imgUri))
             }.distinct()
             selectImageAdapter.addItems2(submitSelectImageList)
+
+
+            // 리스트의 iterator 얻기
+            val iterator = pickerAdapter.currentList.iterator()
+            var removedIndex : Int = 0
+
+            // iterator를 사용하여 리스트의 모든 요소 순환
+            while (iterator.hasNext()) {
+                val element = iterator.next()
+                if(element.imgUri == pickerItem.imgUri){
+                    removedIndex = pickerAdapter.currentList.indexOf(element)
+                    break
+                }
+            }
+
+            val removedPickerList = pickerAdapter.currentList.toMutableList()
+            removedPickerList[removedIndex] = PickerItem(removedPickerList[removedIndex].imgFolderName, removedPickerList[removedIndex].imgUri, false, 0)
+            pickerAdapter.addItems(removedPickerList)
+
         }else if(!selectImageAdapter.currentList.contains(SelectImage(pickerItem.imgUri))){
 
             Log.d(TAG, "actionOnClick: 선택!!")
@@ -56,7 +76,22 @@ class PickerActivity : AppCompatActivity() {
             }.distinct()
             selectImageAdapter.addItems2(submitSelectImageList)
 
-            /*selectImageAdapter.addItems(SelectImage(pickerItem.imgUri))*/
+            val iterator = pickerAdapter.currentList.iterator()
+            var addedIndex : Int = 0
+            // iterator를 사용하여 리스트의 모든 요소 순환
+            while (iterator.hasNext()) {
+                val element = iterator.next()
+                if(element.imgUri == pickerItem.imgUri){
+                    addedIndex = pickerAdapter.currentList.indexOf(element)
+                    break
+                }
+            }
+
+            var aa = selectImageAdapter.currentList.indexOf(SelectImage(pickerItem.imgUri))
+            Log.d(TAG, "actionOnClick: $aa")
+            val addedPickerList = pickerAdapter.currentList.toMutableList()
+            addedPickerList[addedIndex] = PickerItem(addedPickerList[addedIndex].imgFolderName, addedPickerList[addedIndex].imgUri, true, aa+1)
+            pickerAdapter.addItems(addedPickerList)
         }
         
 
@@ -90,7 +125,7 @@ class PickerActivity : AppCompatActivity() {
                 val imageUri = Uri.withAppendedPath(externalUri, "" + getLong(columnIndexID))
 
                 folderNameList.add(folderName)
-                pickerItemList.add(PickerItem(folderName, imageUri))
+                pickerItemList.add(PickerItem(folderName, imageUri, false, 0))
 
                 // 얘네로 PickerItem List를 생성
                 Log.d(ContentValues.TAG, folderName)

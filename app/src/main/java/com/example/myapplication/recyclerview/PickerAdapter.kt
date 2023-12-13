@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -80,11 +81,15 @@ class PickerAdapter(
 /*                tvImgUri.text = item.imgUriName
                 *//*tvFolderName.text = item.imgFolderName*//*
                 tvFolderName.text = a.toString()*/
+                if(item.isChecked){
+                    tvNumber.visibility = View.VISIBLE
+                    tvNumber.setText(item.selectedNumber.toString())
+                }
+
                 Glide.with(itemView)
                     .load(item.imgUri)
                     .into(ivPicture)
-
-                linLaout.setOnClickListener {
+                fLayout.setOnClickListener {
 
                     Log.d(ContentValues.TAG, "bind: 클릭이벤트 오긴 하나?")
                     onItemClick(item)
