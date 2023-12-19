@@ -53,25 +53,18 @@ class PickerActivity : AppCompatActivity() {
             }.distinct()
             selectImageAdapter.addItems2(submitSelectImageList)
 
-
-            // 리스트의 iterator 얻기
-            val curPickerItemList = pickerAdapter.currentList.toMutableList()
-            val iterator = curPickerItemList.iterator()
-            var removedIndex : Int = 0
-
-            // iterator를 사용하여 리스트의 모든 요소 순환
-            while (iterator.hasNext()) {
-                val element = iterator.next()
-                if(element.imgUri == pickerItem.imgUri){
-                    removedIndex = pickerAdapter.currentList.indexOf(element)
-                    break
+            for(submitSelectImage in submitSelectImageList){
+                for(curPickerItem in curPickerItemList){
+                    if(curPickerItem.imgUri == submitSelectImage.imgUri){
+                        curPickerItem.isChecked = true
+                        curPickerItem.selectedNumber = submitSelectImageList.indexOf(submitSelectImage) + 1
+                    }else if(curPickerItem.imgUri == pickerItem.imgUri){
+                        curPickerItem.isChecked = false
+                        curPickerItem.selectedNumber = 0
+                    }
                 }
+                pickerAdapter.notifyDataSetChanged()
             }
-
-            curPickerItemList[removedIndex] = PickerItem(pickerItem.imgFolderName, pickerItem.imgUri, false, 0)
-            pickerAdapter.addItems(curPickerItemList)
-            Log.d(TAG, "pickerItem.isChecked: ${pickerItem.isChecked}")
-            Log.d(TAG, "pickerItem.selectedNumber: ${pickerItem.selectedNumber}")
 
         // 선택한 pickerItem의 imgUri가 썸네일 리사이클러뷰의 아이템에 없다면
         }else if(!selectImageAdapter.currentList.contains(SelectImage(pickerItem.imgUri))){
@@ -94,13 +87,14 @@ class PickerActivity : AppCompatActivity() {
                 for(pickerItem in curPickerItemList){
                     if(pickerItem.imgUri == selectImage.imgUri){
                         pickerItem.isChecked = true
-                        pickerItem.selectedNumber = curSelectImageList.indexOf(selectImage) + 3
+                        pickerItem.selectedNumber = curSelectImageList.indexOf(selectImage) + 1
+
 
                     }
                 }
             }
 
-/*            pickerAdapter.addItems(curPickerItemList)*/
+            pickerAdapter.addItems(curPickerItemList)
         }
             pickerAdapter.notifyDataSetChanged()
             selectImageAdapter.notifyDataSetChanged()
