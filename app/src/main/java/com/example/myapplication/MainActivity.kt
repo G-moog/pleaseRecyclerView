@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.example.myapplication.recyclerview.PickerActivity
+import com.example.myapplication.webview.WebViewActivity
 import com.example.sample.R
 import com.example.sample.databinding.ActivityMainBinding
 
@@ -27,6 +28,10 @@ class MainActivity : AppCompatActivity() {
         }
         binding.btnViewpage2.setOnClickListener{
             val intent = Intent(this, PickerActivity::class.java)
+            startActivity(intent)
+        }
+        binding.btnWebview.setOnClickListener{
+            val intent = Intent(this, WebViewActivity::class.java)
             startActivity(intent)
         }
 
