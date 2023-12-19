@@ -54,30 +54,29 @@ class PickerActivity : AppCompatActivity() {
             selectImageAdapter.addItems2(submitSelectImageList)
 
             if(submitSelectImageList.isNotEmpty()){
-                for(submitSelectImage in submitSelectImageList){
-                    for(curPickerItem in curPickerItemList){
-                        if(curPickerItem.imgUri == submitSelectImage.imgUri){
+                submitSelectImageList.forEach{submitSelectImage ->
+                    curPickerItemList.forEach{curPickerItem ->
+                        if(submitSelectImageList.indexOf(SelectImage(curPickerItem.imgUri)) > -1){
                             curPickerItem.isChecked = true
                             curPickerItem.selectedNumber = submitSelectImageList.indexOf(submitSelectImage) + 1
-                        }else if(curPickerItem.imgUri == pickerItem.imgUri){
+                        }else if(curPickerItemList.indexOf(pickerItem) > -1){
                             curPickerItem.isChecked = false
                             curPickerItem.selectedNumber = 0
                         }
                     }
                 }
             }else{
-                for(curPickerItem in curPickerItemList){
-                    if(curPickerItem.imgUri == pickerItem.imgUri){
-                        curPickerItem.isChecked = false
-                        curPickerItem.selectedNumber = 0
-                    }
+                var selectedIndex : Int = curPickerItemList.indexOf(pickerItem)
+                if(selectedIndex > -1){
+                    curPickerItemList[selectedIndex].isChecked = false
+                    curPickerItemList[selectedIndex].selectedNumber = 0
                 }
             }
 
-
-            for(item in curPickerItemList){
-                Log.d(TAG, "삭제할때 아이템 출력 : $item")
+            curPickerItemList.forEach{
+                Log.d(TAG, "삭제할 때 아이템 출력: $it")
             }
+
             pickerAdapter.notifyDataSetChanged()
             pickerAdapter.addItems(curPickerItemList)
             pickerAdapter.notifyDataSetChanged()
@@ -93,29 +92,26 @@ class PickerActivity : AppCompatActivity() {
             }.distinct()
             selectImageAdapter.addItems2(submitSelectImageList)
 
-            for(item in selectImageAdapter.currentList.toMutableList()){
-                Log.d(TAG, "썸네일 아이템 추가 하고 전체 출력: $item")
+            selectImageAdapter.currentList.toMutableList().forEach{
+                Log.d(TAG, "썸네일 아이템 추가하고 전체 출력 : $it")
             }
 
-            for(selectImage in curSelectImageList){
-                for(pickerItem in curPickerItemList){
-                    if(pickerItem.imgUri == selectImage.imgUri){
-                        pickerItem.isChecked = true
-                        pickerItem.selectedNumber = curSelectImageList.indexOf(selectImage) + 1
-
-
+            curSelectImageList.forEach{curSelectImage ->
+                curPickerItemList.forEach{curPickerItem ->
+                    if(curSelectImageList.indexOf(curSelectImage) > -1){
+                        curPickerItem.isChecked = true
+                        curPickerItem.selectedNumber = curSelectImageList.indexOf(curSelectImage) + 1
                     }
                 }
             }
-
             pickerAdapter.addItems(curPickerItemList)
         }
             pickerAdapter.notifyDataSetChanged()
             selectImageAdapter.notifyDataSetChanged()
-            for(item in pickerAdapter.currentList){
-                Log.d(TAG, "피커아이템 전체 출력: ${item}")
-            }
 
+            pickerAdapter.currentList.forEach{
+                Log.d(TAG, "피커아이템 전체 출력: $it")
+            }
     }
 
     private val folderNameList = mutableListOf<String>()
