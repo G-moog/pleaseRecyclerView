@@ -43,41 +43,55 @@ class PickerActivity : AppCompatActivity() {
             val curSelectImageList = selectImageAdapter.currentList.toMutableList()
 
 
-        if(selectImageAdapter.currentList.contains(SelectImage(pickerItem.imgUri))){
+        if(pickerItem.isChecked){
 
             Log.d(TAG, "actionOnClick: 해제!!")
 
             selectImageList.remove(SelectImage(pickerItem.imgUri))
-            val submitSelectImageList = selectImageAdapter.currentList.toMutableList().apply {
+            val submitSelectImageList = curSelectImageList.apply {
                 remove(SelectImage(pickerItem.imgUri))
             }.distinct()
             selectImageAdapter.addItems2(submitSelectImageList)
 
-            for(submitSelectImage in submitSelectImageList){
+            if(submitSelectImageList.isNotEmpty()){
+                for(submitSelectImage in submitSelectImageList){
+                    for(curPickerItem in curPickerItemList){
+                        if(curPickerItem.imgUri == submitSelectImage.imgUri){
+                            curPickerItem.isChecked = true
+                            curPickerItem.selectedNumber = submitSelectImageList.indexOf(submitSelectImage) + 1
+                        }else if(curPickerItem.imgUri == pickerItem.imgUri){
+                            curPickerItem.isChecked = false
+                            curPickerItem.selectedNumber = 0
+                        }
+                    }
+                }
+            }else{
                 for(curPickerItem in curPickerItemList){
-                    if(curPickerItem.imgUri == submitSelectImage.imgUri){
-                        curPickerItem.isChecked = true
-                        curPickerItem.selectedNumber = submitSelectImageList.indexOf(submitSelectImage) + 1
-                    }else if(curPickerItem.imgUri == pickerItem.imgUri){
+                    if(curPickerItem.imgUri == pickerItem.imgUri){
                         curPickerItem.isChecked = false
                         curPickerItem.selectedNumber = 0
                     }
                 }
-                pickerAdapter.notifyDataSetChanged()
             }
 
+
+            for(item in curPickerItemList){
+                Log.d(TAG, "삭제할때 아이템 출력 : $item")
+            }
+            pickerAdapter.notifyDataSetChanged()
+            pickerAdapter.addItems(curPickerItemList)
+            pickerAdapter.notifyDataSetChanged()
+
         // 선택한 pickerItem의 imgUri가 썸네일 리사이클러뷰의 아이템에 없다면
-        }else if(!selectImageAdapter.currentList.contains(SelectImage(pickerItem.imgUri))){
+        }else if(!pickerItem.isChecked){
 
             Log.d(TAG, "actionOnClick: 선택!!")
 
             /*선택한 pickerItem을 썸네일 리사이클러뷰에 넣는 과정 (S)*/
-            val submitSelectImageList = selectImageAdapter.currentList.toMutableList().apply {
+            val submitSelectImageList = curSelectImageList.apply {
                 add(SelectImage(pickerItem.imgUri))
             }.distinct()
             selectImageAdapter.addItems2(submitSelectImageList)
-
-            selectImageAdapter.notifyDataSetChanged()
 
             for(item in selectImageAdapter.currentList.toMutableList()){
                 Log.d(TAG, "썸네일 아이템 추가 하고 전체 출력: $item")

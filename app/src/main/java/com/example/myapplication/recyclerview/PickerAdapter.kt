@@ -84,6 +84,8 @@ class PickerAdapter(
                 if(item.isChecked){
                     tvNumber.visibility = View.VISIBLE
                     tvNumber.setText(item.selectedNumber.toString())
+                }else{
+                    tvNumber.visibility = View.GONE
                 }
 
                 Glide.with(itemView)

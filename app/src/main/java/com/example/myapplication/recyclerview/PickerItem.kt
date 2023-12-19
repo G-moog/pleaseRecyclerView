@@ -8,7 +8,7 @@ data class PickerItem(
     val imgFolderName: String,
     val imgUri : Uri,
     var isChecked : Boolean = false,
-    var selectedNumber : Number
+    var selectedNumber : Int
 ) {
     // 더미
     companion object {
