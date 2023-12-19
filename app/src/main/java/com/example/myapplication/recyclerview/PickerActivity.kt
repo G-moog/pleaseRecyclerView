@@ -37,11 +37,8 @@ class PickerActivity : AppCompatActivity() {
 
         //선택한 아이템 상단에 보이게 하기
     private fun actionOnClick(pickerItem: PickerItem){
-            Log.d(TAG, "actionOnClick: 클릭이벤트는?")
-
-            val curPickerItemList = pickerAdapter.currentList.toMutableList()
-            val curSelectImageList = selectImageAdapter.currentList.toMutableList()
-
+        val curPickerItemList = pickerAdapter.currentList.toMutableList()
+        val curSelectImageList = selectImageAdapter.currentList.toMutableList()
 
         if(pickerItem.isChecked){
 
