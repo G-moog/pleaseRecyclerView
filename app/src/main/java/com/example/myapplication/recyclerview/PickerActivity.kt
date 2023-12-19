@@ -38,6 +38,11 @@ class PickerActivity : AppCompatActivity() {
         //선택한 아이템 상단에 보이게 하기
     private fun actionOnClick(pickerItem: PickerItem){
             Log.d(TAG, "actionOnClick: 클릭이벤트는?")
+
+            val curPickerItemList = pickerAdapter.currentList.toMutableList()
+            val curSelectImageList = selectImageAdapter.currentList.toMutableList()
+
+
         if(selectImageAdapter.currentList.contains(SelectImage(pickerItem.imgUri))){
 
             Log.d(TAG, "actionOnClick: 해제!!")
@@ -78,38 +83,28 @@ class PickerActivity : AppCompatActivity() {
                 add(SelectImage(pickerItem.imgUri))
             }.distinct()
             selectImageAdapter.addItems2(submitSelectImageList)
-            /*선택한 pickerItem을 썸네일 리사이클러뷰에 넣는 과정 (E)*/
 
+            selectImageAdapter.notifyDataSetChanged()
 
-            /*선택한 pickerItem이 Picker리사이클러뷰에서 몇번째 인덱스를 가지는지 추출하는 과정 (S)*/
-            val curPickerItemList = pickerAdapter.currentList.toMutableList()
-            val iterator = curPickerItemList.iterator()
-            var addedIndex : Int = 0
+            for(item in selectImageAdapter.currentList.toMutableList()){
+                Log.d(TAG, "썸네일 아이템 추가 하고 전체 출력: $item")
+            }
 
-            // iterator를 사용하여 리스트의 모든 요소 순환
-            while (iterator.hasNext()) {
-                val element = iterator.next()
-                if(element.imgUri == pickerItem.imgUri){
-                    addedIndex = pickerAdapter.currentList.indexOf(element)
-                    break
+            for(selectImage in curSelectImageList){
+                for(pickerItem in curPickerItemList){
+                    if(pickerItem.imgUri == selectImage.imgUri){
+                        pickerItem.isChecked = true
+                        pickerItem.selectedNumber = curSelectImageList.indexOf(selectImage) + 3
+
+                    }
                 }
             }
-            /*선택한 pickerItem이 Picker리사이클러뷰에서 몇번째 인덱스를 가지는지 추출하는 과정 (E)*/
 
-
-            /*선택한 pickerItem이 썸네일 리사이클러뷰에서 몇번째 인덱스를 가지는지 추출하는 과정 (S)*/
-            val curSelectImageList = selectImageAdapter.currentList.toMutableList()
-
-
-            var aa = curSelectImageList.size
-            Log.d(TAG, "actionOnClick: $aa")
-
-            // 선택한 PickerItem의 isChecked 속성을 true로, selectedNumber 속성을 썸네일 리사이클러뷰에서의 index+1 로 바꿔서 다시 넣어주는 과정
-            curPickerItemList[addedIndex] = PickerItem(curPickerItemList[addedIndex].imgFolderName, curPickerItemList[addedIndex].imgUri, true, aa+1)
-            pickerAdapter.addItems(curPickerItemList)
-            Log.d(TAG, "pickerItem.isChecked: ${pickerItem.isChecked}")
-            Log.d(TAG, "pickerItem.selectedNumber: ${pickerItem.selectedNumber}")
+/*            pickerAdapter.addItems(curPickerItemList)*/
         }
+            pickerAdapter.notifyDataSetChanged()
+            selectImageAdapter.notifyDataSetChanged()
+
     }
 
     private val folderNameList = mutableListOf<String>()
