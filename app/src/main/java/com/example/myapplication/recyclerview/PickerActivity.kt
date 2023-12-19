@@ -104,6 +104,9 @@ class PickerActivity : AppCompatActivity() {
         }
             pickerAdapter.notifyDataSetChanged()
             selectImageAdapter.notifyDataSetChanged()
+            for(item in pickerAdapter.currentList){
+                Log.d(TAG, "피커아이템 전체 출력: ${item}")
+            }
 
     }
 
