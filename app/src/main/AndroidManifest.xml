@@ -13,8 +13,8 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <!-- android:usesCleartextTraffic="true"              이거 해야 http로도 요청 보내짐-->
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -23,15 +23,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name="com.example.myapplication.webview.WebViewActivity"
-            android:exported="true" >
-
-        </activity>
-
-        <activity
-            android:name="com.example.myapplication.MainActivity"
+            android:name="com.example.myapplication.retrofit.PostActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,9 +35,25 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.example.myapplication.viewmodel.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.myapplication.webview.WebViewActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.example.myapplication.MainActivity"
+            android:exported="true"></activity>
+        <activity
             android:name="com.example.myapplication.recyclerview.PickerActivity"
-            android:exported="false">
+            android:exported="false" />
+        <activity
+            android:name="com.example.myapplication.countingviewmodel.CountingActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

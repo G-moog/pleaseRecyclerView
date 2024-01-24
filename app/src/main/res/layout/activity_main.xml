@@ -20,30 +20,57 @@
        <TextView
            android:id="@+id/btn_recyclerview"
            android:layout_width="200dp"
-           android:layout_height="100dp"
+           android:layout_height="60dp"
            android:background="@android:color/darker_gray"
            android:layout_gravity="center_horizontal"
            android:text="RecyclerView"
            android:gravity="center"
-           android:layout_marginTop="80dp"/>
+           android:layout_marginTop="40dp"/>
        <TextView
            android:id="@+id/btn_fragment"
            android:layout_width="200dp"
-           android:layout_height="100dp"
+           android:layout_height="60dp"
            android:background="@android:color/darker_gray"
            android:layout_gravity="center_horizontal"
            android:text="Fragment"
            android:gravity="center"
-           android:layout_marginTop="80dp"/>
+           android:layout_marginTop="40dp"/>
        <TextView
            android:id="@+id/btn_viewpage2"
            android:layout_width="200dp"
-           android:layout_height="100dp"
+           android:layout_height="60dp"
            android:background="@android:color/darker_gray"
            android:layout_gravity="center_horizontal"
            android:text="ViewPage2"
            android:gravity="center"
-           android:layout_marginTop="80dp"/>
+           android:layout_marginTop="40dp"/>
+       <TextView
+           android:id="@+id/btn_viewmodel"
+           android:layout_width="200dp"
+           android:layout_height="60dp"
+           android:background="@android:color/darker_gray"
+           android:layout_gravity="center_horizontal"
+           android:text="ViewModel(Counting)"
+           android:gravity="center"
+           android:layout_marginTop="40dp"/>
+       <TextView
+           android:id="@+id/btn_retrofit"
+           android:layout_width="200dp"
+           android:layout_height="60dp"
+           android:background="@android:color/darker_gray"
+           android:layout_gravity="center_horizontal"
+           android:text="Retrofit"
+           android:gravity="center"
+           android:layout_marginTop="40dp"/>
+       <TextView
+           android:id="@+id/btn_nothing"
+           android:layout_width="200dp"
+           android:layout_height="60dp"
+           android:background="@android:color/darker_gray"
+           android:layout_gravity="center_horizontal"
+           android:text="예비용"
+           android:gravity="center"
+           android:layout_marginTop="40dp"/>
 
    </LinearLayout>
 </layout>
