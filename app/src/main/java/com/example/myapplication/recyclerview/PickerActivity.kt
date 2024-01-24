@@ -37,91 +37,78 @@ class PickerActivity : AppCompatActivity() {
 
         //선택한 아이템 상단에 보이게 하기
     private fun actionOnClick(pickerItem: PickerItem){
-            Log.d(TAG, "actionOnClick: 클릭이벤트는?")
-        if(selectImageAdapter.currentList.contains(SelectImage(pickerItem.imgUri))){
+        val curPickerItemList = pickerAdapter.currentList.toMutableList()
+        val curSelectImageList = selectImageAdapter.currentList.toMutableList()
+
+        if(pickerItem.isChecked){
 
             Log.d(TAG, "actionOnClick: 해제!!")
 
             selectImageList.remove(SelectImage(pickerItem.imgUri))
-            val submitSelectImageList = selectImageAdapter.currentList.toMutableList().apply {
+            val submitSelectImageList = curSelectImageList.apply {
                 remove(SelectImage(pickerItem.imgUri))
             }.distinct()
             selectImageAdapter.addItems2(submitSelectImageList)
 
-
-            // 리스트의 iterator 얻기
-            val iterator = pickerAdapter.currentList.iterator()
-            var removedIndex : Int = 0
-
-            // iterator를 사용하여 리스트의 모든 요소 순환
-            while (iterator.hasNext()) {
-                val element = iterator.next()
-                if(element.imgUri == pickerItem.imgUri){
-                    removedIndex = pickerAdapter.currentList.indexOf(element)
-                    break
+            if(submitSelectImageList.isNotEmpty()){
+                submitSelectImageList.forEach{submitSelectImage ->
+                    curPickerItemList.forEach{curPickerItem ->
+                        if(submitSelectImageList.indexOf(SelectImage(curPickerItem.imgUri)) > -1){
+                            curPickerItem.isChecked = true
+                            curPickerItem.selectedNumber = submitSelectImageList.indexOf(submitSelectImage) + 1
+                        }else if(curPickerItemList.indexOf(pickerItem) > -1){
+                            curPickerItem.isChecked = false
+                            curPickerItem.selectedNumber = 0
+                        }
+                    }
+                }
+            }else{
+                var selectedIndex : Int = curPickerItemList.indexOf(pickerItem)
+                if(selectedIndex > -1){
+                    curPickerItemList[selectedIndex].isChecked = false
+                    curPickerItemList[selectedIndex].selectedNumber = 0
                 }
             }
 
-            val removedPickerList = pickerAdapter.currentList.toMutableList()
-            removedPickerList[removedIndex] = PickerItem(removedPickerList[removedIndex].imgFolderName, removedPickerList[removedIndex].imgUri, false, 0)
-            pickerAdapter.addItems(removedPickerList)
+            curPickerItemList.forEach{
+                Log.d(TAG, "삭제할 때 아이템 출력: $it")
+            }
 
-        }else if(!selectImageAdapter.currentList.contains(SelectImage(pickerItem.imgUri))){
+            pickerAdapter.notifyDataSetChanged()
+            pickerAdapter.addItems(curPickerItemList)
+            pickerAdapter.notifyDataSetChanged()
+
+        // 선택한 pickerItem의 imgUri가 썸네일 리사이클러뷰의 아이템에 없다면
+        }else if(!pickerItem.isChecked){
 
             Log.d(TAG, "actionOnClick: 선택!!")
 
-            selectImageList.add(SelectImage(pickerItem.imgUri))
-            val submitSelectImageList = selectImageAdapter.currentList.toMutableList().apply {
+            /*선택한 pickerItem을 썸네일 리사이클러뷰에 넣는 과정 (S)*/
+            val submitSelectImageList = curSelectImageList.apply {
                 add(SelectImage(pickerItem.imgUri))
             }.distinct()
             selectImageAdapter.addItems2(submitSelectImageList)
 
-            /*
-            === 로직 ===
-            목표. 선택한 PickerRecylerView의 Item의 'isChecked' 속성을 true로 변경하고, 'selectedNumber' 속성을
-                  해당 Item의 imgUri를 가진 SelectImageRecyclerView의 Item의 index+1 의 값으로 변경해야 한다.
+            selectImageAdapter.currentList.toMutableList().forEach{
+                Log.d(TAG, "썸네일 아이템 추가하고 전체 출력 : $it")
+            }
 
-                  1. 선택한 PickerRecylerView의 Item의 imgUri 값을 가지는 SelectImage가 가지는 index 값을 구한다.
-
-            */
-
-            val selectImageIterator = selectImageAdapter.currentList.iterator()
-            var addedSelectImageIndex : Int = 0
-            // iterator를 사용하여 리스트의 모든 요소 순환
-/*            while (selectImageIterator.hasNext()) {
-                Log.d(TAG, "actionOnClick: 와일문 진입")
-                val element = selectImageIterator.next()
-                Log.d(TAG, "element.imgUri: ${element.imgUri}")
-                Log.d(TAG, "pickerItem.imgUri: ${pickerItem.imgUri}")
-                if(element.imgUri == pickerItem.imgUri){
-
-                    Log.d(TAG, "actionOnClick: 일치하는거 찾음")
-                    addedSelectImageIndex = selectImageAdapter.currentList.indexOf(element)
-
-                }
-            }*/
-
-            for (item in selectImageAdapter.currentList) {
-                Log.d(TAG, "item.imgUri: ${item.imgUri}")
-                Log.d(TAG, "pickerItem.imgUri: ${pickerItem.imgUri}")
-                if(item.imgUri == pickerItem.imgUri){
-
-
-                    Log.d(TAG, "actionOnClick: 일치하는거 찾음")
-                    addedSelectImageIndex = selectImageAdapter.currentList.indexOf(item)
-
+            curSelectImageList.forEach{curSelectImage ->
+                curPickerItemList.forEach{curPickerItem ->
+                    if(curSelectImageList.indexOf(curSelectImage) > -1){
+                        curPickerItem.isChecked = true
+                        curPickerItem.selectedNumber = curSelectImageList.indexOf(curSelectImage) + 1
+                    }
                 }
             }
-            Log.d(TAG, "actionOnClick: 와일문 탈출")
-            Log.d(TAG, "addedIndex: $addedSelectImageIndex")
-            val addedPickerList = pickerAdapter.currentList.toMutableList()
-            var changedPicerImageIndex = pickerAdapter.currentList.indexOf(pickerItem)
-            addedPickerList[changedPicerImageIndex] = PickerItem(pickerItem.imgFolderName, pickerItem.imgUri, true, addedSelectImageIndex+1)
-            pickerAdapter.addItems(addedPickerList)
+            pickerAdapter.addItems(curPickerItemList)
         }
-        
+            pickerAdapter.notifyDataSetChanged()
+            selectImageAdapter.notifyDataSetChanged()
 
-
+            pickerAdapter.currentList.forEach{
+                Log.d(TAG, "피커아이템 전체 출력: $it")
+            }
     }
 
     private val folderNameList = mutableListOf<String>()

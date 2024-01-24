@@ -84,32 +84,20 @@ class PickerAdapter(
                 if(item.isChecked){
                     tvNumber.visibility = View.VISIBLE
                     tvNumber.setText(item.selectedNumber.toString())
+                }else{
+                    tvNumber.visibility = View.GONE
                 }
 
                 Glide.with(itemView)
                     .load(item.imgUri)
                     .into(ivPicture)
                 fLayout.setOnClickListener {
-
-                    Log.d(ContentValues.TAG, "bind: 클릭이벤트 오긴 하나?")
                     onItemClick(item)
-                    Log.d(ContentValues.TAG, "bind: 클릭이벤트 오긴 하나?22222")
-
-                    if(item.isChecked){
-                        item.isChecked = false
-                        /*dimList.remove(item.imgUri)*/
-                    }else{
-                        item.isChecked = true
-                        /*dimList.add(item.imgUri)*/
-                        /*selectedImgAdapter.addItems(SelectedImg.createSamples(dimList))*/
-                    }
                 }
 
 
             }
         }
-
-
 
 
         // 뷰홀더를 비우는 함수
